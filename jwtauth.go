@@ -3,6 +3,7 @@ package jwtauth
 import (
 	"context"
 	"errors"
+	"log"
 	"net/http"
 	"strings"
 	"time"
@@ -74,6 +75,7 @@ func Verify(ja *JWTAuth, findTokenFns ...func(r *http.Request) string) func(http
 		hfn := func(w http.ResponseWriter, r *http.Request) {
 			ctx := r.Context()
 			token, err := VerifyRequest(ja, r, findTokenFns...)
+			log.Println("token", token)
 			ctx = NewContext(ctx, token, err)
 			next.ServeHTTP(w, r.WithContext(ctx))
 		}
